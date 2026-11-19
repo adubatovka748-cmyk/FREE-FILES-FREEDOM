@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FFF — Free Files Freedom</title>
+<style>
+:root{--bg:#0d1117;--s:#161b26;--s2:#1d2433;--line:#2a3246;--text:#e6e9f2;--mut:#8b93a7;--a:#7c6cff;--b:#22d3a6;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:inherit}
+button{font:inherit;cursor:pointer;border:0;border-radius:10px;padding:9px 16px;color:#fff;font-weight:600;background:linear-gradient(135deg,var(--a),#5b8cff)}
+button.g{background:var(--s2);border:1px solid var(--line);color:var(--text);font-weight:500}
+button.t{background:linear-gradient(135deg,var(--b),#18a5c9);color:#04201a}
+button.sm{padding:5px 10px;font-size:13px}
+button:disabled{opacity:.5;cursor:wait}
+input[type=text],input[type=password],textarea,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--text);font:inherit}
+textarea{min-height:90px;resize:vertical}
+input[type=file]{color:var(--text);font-size:14px;max-width:100%}
+label{display:grid;gap:4px;font-size:13px;color:var(--mut)}
+header{position:sticky;top:0;z-index:5;background:rgba(13,17,23,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top{max-width:1200px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:14px}
+.logo{font-weight:800;font-size:22px;letter-spacing:-.03em;background:linear-gradient(135deg,var(--a),var(--b));-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
+.lb{display:grid;line-height:1.1}
+.sub{font-size:9px;letter-spacing:.18em;color:var(--mut);font-weight:600;white-space:nowrap}
+.top input{flex:1;min-width:0}
+.usr{display:flex;gap:8px;align-items:center;white-space:nowrap;font-size:14px;color:var(--mut)}
+nav{max-width:1200px;margin:0 auto;padding:0 16px 10px;display:flex;gap:8px;overflow-x:auto}
+nav button{background:var(--s);border:1px solid var(--line);color:var(--mut);font-weight:500;padding:6px 14px;white-space:nowrap;border-radius:99px}
+nav button.on{background:linear-gradient(135deg,var(--a),#5b8cff);color:#fff;border-color:transparent}
+.wrap{max-width:1200px;margin:0 auto;padding:20px 16px 60px;display:grid;grid-template-columns:1fr 290px;gap:24px}
+@media(max-width:900px){.wrap{grid-template-columns:1fr}.top{flex-wrap:wrap}.logo{order:0}.top input{order:3;flex-basis:100%}}
+.head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.head h2{margin:0;font-size:18px}
+.sort{display:flex;gap:6px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px}
+.card{background:var(--s);border:1px solid var(--line);border-radius:14px;overflow:hidden;cursor:pointer;transition:transform .15s,border-color .15s;position:relative}
+.card:hover{transform:translateY(-3px);border-color:var(--a)}
+.cv{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;background:var(--s2)}
+.nc{aspect-ratio:3/4;display:grid;place-items:center;font-size:44px;background:linear-gradient(160deg,var(--s2),var(--s))}
+.bd{position:absolute;top:8px;left:8px;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;background:var(--b);color:#04201a}
+.bd.f{background:var(--a);color:#fff}
+.ci{padding:10px 12px;display:grid;gap:2px}
+.ci b{font-size:14px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ci small{color:var(--mut);font-size:12px}
+aside{display:grid;gap:16px;align-content:start}
+.box{background:var(--s);border:1px solid var(--line);border-radius:14px;padding:14px}
+.box h3{margin:0 0 10px;font-size:15px}
+.li{display:flex;gap:10px;align-items:center;padding:6px 0;cursor:pointer;border-top:1px solid var(--line)}
+.li:first-of-type{border-top:0}
+.li img,.li .m{width:38px;height:50px;border-radius:6px;object-fit:cover;background:var(--s2);flex:none;display:grid;place-items:center}
+.li span{font-size:13px;line-height:1.3}.li small{display:block;color:var(--mut)}
+.empty{grid-column:1/-1;text-align:center;color:var(--mut);padding:40px 10px}
+dialog{background:var(--s);color:var(--text);border:1px solid var(--line);border-radius:16px;padding:0;width:min(720px,94vw);max-height:92vh}
+dialog::backdrop{background:rgba(0,0,0,.65)}
+.dh{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--s);z-index:1}
+.dh h2{margin:0;font-size:18px}
+.db{padding:18px;display:grid;gap:12px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:600px){.two{grid-template-columns:1fr}}
+.det{display:grid;grid-template-columns:220px 1fr;gap:18px}
+@media(max-width:600px){.det{grid-template-columns:1fr}}
+.det .cv{border-radius:12px}
+.pre{white-space:pre-wrap;word-break:break-word;color:#c9cee0}
+.shots{display:flex;gap:8px;overflow-x:auto}
+.shots img{height:110px;border-radius:8px;border:1px solid var(--line)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:13px;color:var(--mut)}
+.kv b{color:var(--text);font-weight:500;word-break:break-all}
+.files{max-height:160px;overflow:auto;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:12px;color:var(--mut)}
+.files div{display:flex;justify-content:space-between;gap:10px;padding:1px 0}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+.err{color:#ff7b7b;font-size:14px;min-height:1em}
+.hint{font-size:12px;color:var(--mut)}
+.tabs{display:flex;gap:8px}
+footer{max-width:1200px;margin:0 auto;padding:0 16px 40px;color:var(--mut);font-size:12px}
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <div class="lb"><div class="logo">FFF</div><div class="sub">FREE FILES FREEDOM</div></div>
+    <input type="text" id="q" placeholder="Поиск по каталогу…">
+  </div>
+  <nav id="nav"></nav>
+</header>
+<div class="wrap">
+  <main>
+    <div class="head"><h2 id="ttl">Все материалы</h2>
+      <div class="sort"><button class="g sm" data-s="new">Новые</button><button class="g sm" data-s="az">А–Я</button></div></div>
+    <div class="grid" id="grid"></div>
+  </main>
+  <aside>
+    <div class="box" id="adm" hidden><h3>Режим редактора</h3>
+      <div class="hint" style="margin-bottom:10px">Изменения увидят посетители только после загрузки catalog.json в репозиторий.</div>
+      <div class="acts"><button id="addBtn">＋ Добавить</button><button class="t" id="expBtn">⬇ catalog.json</button></div></div>
+    <div class="box"><h3>🆕 Недавно добавлено</h3><div id="top"></div></div>
+    <div class="box"><h3>Статистика</h3><div class="kv" id="stats"></div></div>
+  </aside>
+</div>
+<footer>FFF · Free Files Freedom</footer>
+
+<dialog id="dEdit"><div class="dh"><h2>Материал</h2><button class="g sm" data-close>✕</button></div>
+  <form class="db" id="pub">
+    <label>Название<input type="text" id="title" maxlength="160"></label>
+    <label>Описание<textarea id="desc" maxlength="6000"></textarea></label>
+    <div class="two"><label>Категория<select id="cat"></select></label>
+    <label>Обложка<input type="file" id="cover" accept="image/*"></label></div>
+    <label>Скриншоты<input type="file" id="shots" accept="image/*" multiple></label>
+    <label>Файл или .torrent<input type="file" id="file"></label>
+    <div class="hint" id="tinfo"></div>
+    <label>Или ссылка на файл (для больших файлов, например GitHub Releases)<input type="text" id="url" placeholder="https://…"></label>
+    <label>Видео или аудио для плеера на сайте (mp4/webm/mp3 — файл)<input type="file" id="vfile" accept="video/*,audio/*"></label>
+    <label>…или ссылка на видео для плеера<input type="text" id="vurl" placeholder="https://…/film.mp4"></label>
+    <label>Субтитры .vtt (необязательно)<input type="file" id="subs" accept=".vtt"></label>
+    <label>Magnet-ссылка (необязательно)<input type="text" id="magnet" placeholder="magnet:?xt=urn:btih:…"></label>
+    <div class="hint">Выбранные файлы на сайт не загружаются: положите их в папку <b>files/</b> репозитория под теми же именами.</div>
+    <div><button id="send">Сохранить</button></div><div class="err" id="err"></div></form></dialog>
+<dialog id="dView"></dialog>
+
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)};
+  var CATS=['Игры','Фильмы'];
+  var S={items:[],cat:'',sort:'new',q:'',admin:location.hash==='#admin',tor:null,edit:null,dirty:false};
+  function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+  function size(n){return n>1073741824?(n/1073741824).toFixed(2)+' ГБ':n>1048576?(n/1048576).toFixed(1)+' МБ':Math.max(1,Math.round(n/1024))+' КБ'}
+  var fs=function(p){return p.size?size(p.size):''};
+  var P=function(x){return /^https?:/i.test(x)?x:encodeURI(x)};
+  window.addEventListener('hashchange',function(){location.reload()});
+
+  /* --- торрент: bencode + infohash + magnet --- */
+  function bdec(b,i,top,out){
+    var c=b[i];
+    if(c===105){var e=b.indexOf(101,i);return [parseInt(new TextDecoder().decode(b.subarray(i+1,e)),10),e+1]}
+    if(c===108){var l=[];i++;while(b[i]!==101){var r=bdec(b,i);l.push(r[0]);i=r[1]}return [l,i+1]}
+    if(c===100){var d={};i++;while(b[i]!==101){var k=bdec(b,i);i=k[1];var key=new TextDecoder().decode(k[0]),st=i,v=bdec(b,i);i=v[1];d[key]=v[0];if(top&&key==='info')out.span=[st,i]}return [d,i+1]}
+    var col=b.indexOf(58,i),len=parseInt(new TextDecoder().decode(b.subarray(i,col)),10);
+    return [b.subarray(col+1,col+1+len),col+1+len];
+  }
+  var td=function(u){return u?new TextDecoder().decode(u):''};
+  async function parseTorrent(file){
+    var b=new Uint8Array(await file.arrayBuffer()),out={},d=bdec(b,0,true,out)[0],inf=d.info;
+    if(!inf||!out.span)throw new Error('не торрент-файл');
+    var hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-1',b.subarray(out.span[0],out.span[1])))).map(function(x){return x.toString(16).padStart(2,'0')}).join('');
+    var name=td(inf['name.utf-8']||inf.name),files=[],total=0;
+    if(inf.files){inf.files.forEach(function(f){var p=(f['path.utf-8']||f.path).map(td).join('/');files.push({p:p,l:f.length});total+=f.length})}
+    else{files.push({p:name,l:inf.length});total=inf.length}
+    var tr=[];if(d.announce)tr.push(td(d.announce));
+    (d['announce-list']||[]).forEach(function(t){(Array.isArray(t)?t:[t]).forEach(function(x){var s=td(x);if(s&&tr.indexOf(s)<0)tr.push(s)})});
+    return {name:name,size:total,hash:hash,count:files.length,files:files.slice(0,300),
+      magnet:'magnet:?xt=urn:btih:'+hash+'&dn='+encodeURIComponent(name)+tr.slice(0,8).map(function(t){return '&tr='+encodeURIComponent(t)}).join('')};
+  }
+
+  /* --- каталог --- */
+  function nav(){$('nav').innerHTML='<button data-c="">Все</button>'+CATS.map(function(c){return '<button data-c="'+c+'">'+c+'</button>'}).join('');
+    $('cat').innerHTML=CATS.map(function(c){return '<option>'+c+'</option>'}).join('');mark()}
+  function mark(){document.querySelectorAll('#nav button').forEach(function(b){b.classList.toggle('on',b.dataset.c===S.cat)});
+    document.querySelectorAll('.sort button').forEach(function(b){b.style.outline=b.dataset.s===S.sort?'2px solid var(--a)':'none'});
+    $('ttl').textContent=S.cat||'Все материалы'}
+  $('nav').onclick=function(e){if(e.target.dataset.c!==undefined){S.cat=e.target.dataset.c;mark();render()}};
+  document.querySelector('.sort').onclick=function(e){if(e.target.dataset.s){S.sort=e.target.dataset.s;mark();render()}};
+  $('q').oninput=function(){S.q=this.value.trim().toLowerCase();render()};
+
+  function ico(p){return p.torrent?'🧲':'📦'}
+  function card(p){var c=p.cover?'<img class="cv" loading="lazy" src="'+esc(P(p.cover))+'" alt="">':'<div class="nc">'+ico(p)+'</div>';
+    return '<div class="card" data-id="'+p.id+'">'+c+'<span class="bd'+(p.torrent?'':' f')+'">'+(p.torrent?'TORRENT':'ФАЙЛ')+'</span><div class="ci"><b>'+esc(p.title)+'</b><small>'+esc(p.category)+(fs(p)?' · '+fs(p):'')+'</small></div></div>'}
+  function render(){
+    var l=S.items.filter(function(p){return (!S.cat||p.category===S.cat)&&(!S.q||(p.title+' '+(p.description||'')).toLowerCase().indexOf(S.q)>-1)});
+    l.sort(function(a,b){return S.sort==='az'?a.title.localeCompare(b.title,'ru'):String(b.date).localeCompare(String(a.date))});
+    $('grid').innerHTML=l.length?l.map(card).join(''):'<div class="empty">Здесь пока пусто.</div>';
+    var nw=S.items.slice().sort(function(a,b){return String(b.date).localeCompare(String(a.date))}).slice(0,5);
+    $('top').innerHTML=nw.length?nw.map(function(p){return '<div class="li" data-id="'+p.id+'">'+(p.cover?'<img src="'+esc(P(p.cover))+'" alt="">':'<div class="m">'+ico(p)+'</div>')+'<span>'+esc(p.title)+'<small>'+esc(p.category)+'</small></span></div>'}).join(''):'<div class="hint">Пока пусто</div>';
+    var tot=S.items.reduce(function(a,p){return a+(p.size||0)},0);
+    $('stats').innerHTML='<span>Материалов</span><b>'+S.items.length+'</b><span>Торрентов</span><b>'+S.items.filter(function(p){return p.torrent}).length+'</b><span>Общий объём</span><b>'+(tot?size(tot):'—')+'</b>';
+  }
+  document.addEventListener('click',function(e){var c=e.target.closest('.card,.li');if(c&&c.dataset.id)view(+c.dataset.id);
+    if(e.target.closest('[data-close]'))e.target.closest('dialog').close()});
+  document.querySelectorAll('dialog').forEach(function(d){d.addEventListener('mousedown',function(e){if(e.target===d)d.close()})});
+
+  /* --- просмотр --- */
+  function view(id){var p=S.items.find(function(x){return x.id===id});if(!p)return;var t=p.torrent;
+    $('dView').innerHTML='<div class="dh"><h2>'+esc(p.title)+'</h2><button class="g sm" data-close>✕</button></div><div class="db"><div id="pl"></div><div class="det">'+
+      (p.cover?'<img class="cv" src="'+esc(P(p.cover))+'" alt="">':'<div class="nc cv">'+ico(p)+'</div>')+
+      '<div style="display:grid;gap:10px;align-content:start"><div class="kv"><span>Категория</span><b>'+esc(p.category)+'</b>'+(p.date?'<span>Дата</span><b>'+new Date(p.date).toLocaleDateString('ru-RU')+'</b>':'')+(fs(p)?'<span>Размер</span><b>'+fs(p)+'</b>':'')+
+      (t&&t.hash?'<span>Infohash</span><b>'+esc(t.hash)+'</b>':'')+(t&&t.count?'<span>Файлов</span><b>'+t.count+'</b>':'')+'</div>'+
+      '<div class="acts">'+(p.video?'<button data-a="play">▶ Смотреть</button>':'')+(p.file?'<a href="'+esc(P(p.file))+'" download="'+esc(p.fileName||'')+'" target="_blank" rel="noopener"><button class="t">⬇ '+(t?'Скачать .torrent':'Скачать файл')+'</button></a>':'')+
+      (t&&t.magnet?'<a href="'+esc(t.magnet)+'"><button>🧲 Magnet-ссылка</button></a>':'')+
+      (S.admin?'<button class="g" data-a="edit">Править</button><button class="g" data-a="del">Удалить</button>':'')+'</div></div></div>'+
+      (p.description?'<div class="pre">'+esc(p.description)+'</div>':'')+
+      (p.shots&&p.shots.length?'<div class="shots">'+p.shots.map(function(s){return '<img loading="lazy" src="'+esc(P(s))+'" alt="">'}).join('')+'</div>':'')+
+      (t&&t.files&&t.files.length?'<div class="files">'+t.files.map(function(f){return '<div><span>'+esc(f.p)+'</span><span>'+size(f.l)+'</span></div>'}).join('')+(t.count>t.files.length?'<div>… ещё '+(t.count-t.files.length)+'</div>':'')+'</div>':'')+'</div>';
+    $('dView').dataset.id=id;$('dView').showModal()}
+  $('dView').onclick=function(e){var a=e.target.dataset.a;if(!a)return;var id=+this.dataset.id;
+    if(a==='play'){play(S.items.find(function(x){return x.id===id}));return}
+    if(a==='del'){if(confirm('Удалить из каталога?')){S.items=S.items.filter(function(x){return x.id!==id});S.dirty=true;this.close();render()}}
+    if(a==='edit'){this.close();openEdit(S.items.find(function(x){return x.id===id}))}};
+
+  /* --- плеер --- */
+  function play(p){var pl=$('pl'),aud=/\.(mp3|ogg|wav|m4a|flac|opus)(\?|$)/i.test(p.video),el=document.createElement(aud?'audio':'video'),key='fff_pos_'+p.id;
+    el.controls=true;el.autoplay=true;el.playsInline=true;el.preload='metadata';el.src=P(p.video);
+    el.style.cssText=aud?'width:100%':'width:100%;max-height:62vh;background:#000;border-radius:12px;display:block';
+    if(!aud&&p.cover)el.poster=P(p.cover);
+    if(!aud&&p.subs){var t=document.createElement('track');t.kind='subtitles';t.src=P(p.subs);t.srclang='ru';t.label='Русский';t.default=true;el.appendChild(t)}
+    el.addEventListener('loadedmetadata',function(){try{var v=+localStorage.getItem(key);if(v>5&&v<el.duration-10)el.currentTime=v}catch(x){}});
+    var last=0;el.addEventListener('timeupdate',function(){if(el.currentTime-last>4||el.currentTime<last){last=el.currentTime;try{localStorage.setItem(key,Math.floor(el.currentTime))}catch(x){}}});
+    var msg=document.createElement('div');msg.className='hint';
+    el.addEventListener('error',function(){msg.textContent='Браузер не смог воспроизвести этот файл. Лучше всего работают mp4 (H.264 + AAC) и webm. Файл можно скачать и открыть в своём плеере.'});
+    var bar=document.createElement('div');bar.className='acts';bar.style.marginTop='8px';
+    [0.75,1,1.25,1.5,2].forEach(function(r){var b=document.createElement('button');b.type='button';b.className='g sm';b.textContent=r+'×';b.onclick=function(){el.playbackRate=r};bar.appendChild(b)});
+    if(!aud&&document.pictureInPictureEnabled){var pp=document.createElement('button');pp.type='button';pp.className='g sm';pp.textContent='Окно в окне';pp.onclick=function(){el.requestPictureInPicture().catch(function(){})};bar.appendChild(pp)}
+    pl.innerHTML='';pl.appendChild(el);pl.appendChild(bar);pl.appendChild(msg);pl.scrollIntoView({block:'nearest'})}
+  $('dView').addEventListener('close',function(){this.querySelectorAll('video,audio').forEach(function(m){m.pause();m.removeAttribute('src');m.load()})});
+
+  /* --- редактор (только #admin) --- */
+  function openEdit(p){S.edit=p||null;S.tor=null;$('pub').reset();$('tinfo').textContent='';$('err').textContent='';
+    if(p){$('title').value=p.title;$('desc').value=p.description||'';$('cat').value=p.category;$('magnet').value=p.torrent&&p.torrent.magnet||'';$('url').value=/^https?:/i.test(p.file||'')?p.file:'';$('vurl').value=/^https?:/i.test(p.video||'')?p.video:''}
+    $('dEdit').showModal()}
+  $('addBtn').onclick=function(){openEdit(null)};
+  $('file').onchange=async function(){S.tor=null;$('tinfo').textContent='';var f=this.files[0];if(!f||!/\.torrent$/i.test(f.name))return;
+    try{S.tor=await parseTorrent(f);$('tinfo').textContent='🧲 '+S.tor.name+' · '+size(S.tor.size)+' · файлов: '+S.tor.count;if(!$('title').value)$('title').value=S.tor.name}
+    catch(x){$('tinfo').textContent='Не удалось разобрать .torrent: '+x.message}};
+  $('pub').onsubmit=function(e){e.preventDefault();var er=$('err');er.textContent='';
+    var title=$('title').value.trim(),f=$('file').files[0],cv=$('cover').files[0],sh=Array.from($('shots').files),url=$('url').value.trim(),mag=$('magnet').value.trim();
+    if(!title){er.textContent='Укажите название';return}
+    var it=S.edit||{id:S.items.reduce(function(m,x){return Math.max(m,x.id)},0)+1,date:new Date().toISOString()};
+    it.title=title;it.description=$('desc').value.trim();it.category=$('cat').value;
+    if(cv)it.cover='files/'+cv.name;
+    if(sh.length)it.shots=sh.map(function(x){return 'files/'+x.name});
+    if(url){it.file=url;it.fileName=url.split('?')[0].split('/').pop()||'file'}
+    else if(f){it.file='files/'+f.name;it.fileName=f.name}
+    var vf=$('vfile').files[0],vu=$('vurl').value.trim(),sf=$('subs').files[0];
+    if(vu)it.video=vu;else if(vf)it.video='files/'+vf.name;
+    if(sf)it.subs='files/'+sf.name;
+    if(!it.video&&it.file&&/\.(mp4|webm|m4v|ogv|mov|mp3|ogg|wav|m4a|flac|opus)(\?|$)/i.test(it.file))it.video=it.file;
+    if(f){it.size=f.size;if(S.tor)it.torrent=S.tor;else delete it.torrent}
+    if(mag){var h=/btih:([0-9a-f]{40})/i.exec(mag);it.torrent=it.torrent||{name:title,size:it.size||0,hash:h?h[1].toLowerCase():'',count:0,files:[]};it.torrent.magnet=mag}
+    if(!it.file&&!it.torrent&&!it.video){er.textContent='Добавьте файл, ссылку, видео или magnet';return}
+    if(!S.edit)S.items.push(it);S.dirty=true;$('dEdit').close();render()};
+  $('expBtn').onclick=function(){
+    var a=document.createElement('a'),u=URL.createObjectURL(new Blob([JSON.stringify(S.items,null,1)],{type:'application/json'}));
+    a.href=u;a.download='catalog.json';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},5000);
+    var need=[];S.items.forEach(function(p){[p.cover,p.file,p.video,p.subs].concat(p.shots||[]).forEach(function(x){if(x&&!/^https?:/i.test(x)&&need.indexOf(x)<0)need.push(x)})});
+    S.dirty=false;alert('Загрузите в репозиторий:\n• catalog.json — в корень\n'+(need.length?'• в папку files/ эти файлы:\n'+need.map(function(x){return '   '+x.replace('files/','')}).join('\n'):''))};
+  window.addEventListener('beforeunload',function(e){if(S.dirty){e.preventDefault();e.returnValue=''}});
+
+  (async function(){
+    nav();mark();if(S.admin)$('adm').hidden=false;
+    try{var r=await fetch('catalog.json?'+Date.now());if(!r.ok)throw 0;S.items=await r.json()}
+    catch(x){if(!S.admin){$('grid').innerHTML='<div class="empty">Каталог не загрузился. Откройте сайт по адресу в интернете, а не как файл с диска.</div>';return}S.items=[]}
+    render();
+  })();
+})();
+</script>
+</body>
+</html>
